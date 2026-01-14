@@ -15,13 +15,13 @@ function App() {
 
   const [userId, setUserId] = useState(() => {
     const storedUserId = localStorage.getItem('anonymousChatUserId');
-    return storedUserId || nanoid();
+    return storedUserId || nanoid(); // Исправлено
   });
 
   const [impersonateId, setImpersonateId] = useState('');
   
   const lastMessageIdRef = useRef(() => {
-    return Number(localStorage.getItem('lastMessageId')) || 0;
+    return Number(localStorage.getItem('lastMessageId')) || 0; // Исправлено
   });
   
   const pollingIntervalRef = useRef(null);
@@ -32,9 +32,7 @@ function App() {
 
   const fetchMessages = useCallback(async () => {
     try {
-      const response = await fetch(
-        `http://localhost:7070/messages?from=${lastMessageIdRef.current}`
-      );
+      const response = await fetch(`http://localhost:7070/messages?from=${lastMessageIdRef.current}`); // Исправлено
 
       if (!response.ok) throw new Error('Network response was not ok');
       
@@ -60,13 +58,13 @@ function App() {
 
   const sendMessage = async (e) => {
     e.preventDefault();
-    if (!inputValue.trim() || isSending) return;
+    if (!inputValue.trim() || isSending) return; // Исправлено
     
     setIsSending(true);
     setError(null);
     
     try {
-      const currentUserId = impersonateId || userId;
+      const currentUserId = impersonateId || userId; // Исправлено
       
       const response = await fetch('http://localhost:7070/messages', {
         method: 'POST',

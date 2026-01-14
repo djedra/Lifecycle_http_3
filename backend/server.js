@@ -5,39 +5,39 @@ import bodyParser from "body-parser";
 const app = express();
 
 app.use(cors());
-app.use(
-  bodyParser.json({
-    type(req) {
-      return true;
-    },
-  })
-);
-app.use(function (req, res, next) {
+app.use(bodyParser.json());
+
+// Установим заголовок Content-Type по умолчанию
+app.use((req, res, next) => {
   res.setHeader('Content-Type', 'application/json');
   next();
 });
 
-const messages = [];
+const notes = [];
 let nextId = 1;
 
-app.get("/messages", async (req, res) => {
-  const from = Number(req.query.from);
-  if (req.query.from === 0) {
-    return res.send(JSON.stringify(messages));
-  }
-
-  const fromIndex = messages.findIndex((o) => o.id === from);
-  if (fromIndex === -1) {
-    return res.send(JSON.stringify(messages));
-  }
-  return res.send(JSON.stringify(messages.slice(fromIndex + 1)));
+// Обработка GET-запроса на получение всех заметок
+app.get("/notes", (req, res) => {
+  res.send(JSON.stringify(notes));
 });
 
-app.post("/messages", (req, res) => {
-  messages.push({ ...req.body, id: nextId++ });
-  res.status(204);
-  res.end();
+// Обработка POST-запроса на добавление новой заметки
+app.post("/notes", (req, res) => {
+  notes.push({ ...req.body, id: nextId++ });
+  res.status(201).json({ message: "Note created" });
 });
 
+// Обработка DELETE-запроса на удаление заметки по ID
+app.delete("/notes/:id", (req, res) => {
+  const noteId = Number(req.params.id);
+  const index = notes.findIndex((o) => o.id === noteId);
+  if (index !== -1) {
+    notes.splice(index, 1);
+    return res.status(204).end(); // Успешное удаление
+  }
+  res.status(404).json({ message: "Note not found" }); // Если заметка не найдена
+});
+
+// Запуск сервера
 const port = process.env.PORT || 7070;
-app.listen(port, () => console.log(`The server is running on port ${port}.`));cd
+app.listen(port, () => console.log(`The server is running on http://localhost:${port}`));
