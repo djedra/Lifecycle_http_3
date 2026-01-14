@@ -20,8 +20,8 @@ npm run dev
 
 ## Деплой
 
-![Vercel Deploy](https://deploy-badge.vercel.app/vercel/-projects)
+![Vercel Deploy](https://deploy-badge.vercel.app/vercel/lifecycle-http-3-7snb79nar-antons-projects)
 
-Ссылка на публичную страницу: .vercel.app
+Ссылка на публичную страницу: [.vercel.app](https://lifecycle-http-3-7snb79nar-antons-projects-e07cbbfb.vercel.app/)
 
 ![Веб-страница](./motions/web-page.gif)
