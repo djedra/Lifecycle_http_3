@@ -17,18 +17,20 @@ const notes = [];
 let nextId = 1;
 
 // Обработка GET-запроса на получение всех заметок
-app.get("/notes", (req, res) => {
-  res.send(JSON.stringify(notes));
+app.get("/messages", (req, res) => {
+  const from = Number(req.query.from) || 0; // Получаем параметр from
+  const filteredNotes = notes.filter(note => note.id > from); // Фильтруем заметки
+  res.send(JSON.stringify(filteredNotes)); // Возвращаем отфильтрованные заметки
 });
 
 // Обработка POST-запроса на добавление новой заметки
-app.post("/notes", (req, res) => {
+app.post("/messages", (req, res) => {
   notes.push({ ...req.body, id: nextId++ });
   res.status(201).json({ message: "Note created" });
 });
 
 // Обработка DELETE-запроса на удаление заметки по ID
-app.delete("/notes/:id", (req, res) => {
+app.delete("/:id", (req, res) => {
   const noteId = Number(req.params.id);
   const index = notes.findIndex((o) => o.id === noteId);
   if (index !== -1) {

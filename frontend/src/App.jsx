@@ -20,19 +20,19 @@ function App() {
 
   const [impersonateId, setImpersonateId] = useState('');
   
-  const lastMessageIdRef = useRef(() => {
-    return Number(localStorage.getItem('lastMessageId')) || 0; // Исправлено
-  });
+  const lastMessageIdRef = useRef(0); // Исправлено: инициализация как 0
   
   const pollingIntervalRef = useRef(null);
 
   useEffect(() => {
+    const storedId = Number(localStorage.getItem('lastMessageId')) || 0; // Исправлено
+    lastMessageIdRef.current = storedId;
     localStorage.setItem('anonymousChatUserId', userId);
   }, [userId]);
 
   const fetchMessages = useCallback(async () => {
     try {
-      const response = await fetch(`http://localhost:7070/messages?from=${lastMessageIdRef.current}`); // Исправлено
+      const response = await fetch(`http://localhost:7070/messages?from=${lastMessageIdRef.current}`); // Исправлено: добавлены кавычки
 
       if (!response.ok) throw new Error('Network response was not ok');
       
@@ -59,7 +59,7 @@ function App() {
   const sendMessage = async (e) => {
     e.preventDefault();
     if (!inputValue.trim() || isSending) return; // Исправлено
-    
+
     setIsSending(true);
     setError(null);
     
